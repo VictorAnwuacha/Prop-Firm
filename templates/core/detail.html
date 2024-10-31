@@ -1,0 +1,62 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ product.name }} Detail{% endblock title %}
+
+{% block content %}
+
+    <h1>{{ product.name }} - Detail Page</h1>
+
+    <div class="card mb-3" style="max-width: 90%;">
+      <div class="row g-0">
+        <div class="col-md-5">
+          <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="...">
+        </div>
+        <div class="col-md-7">
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5><br>
+            <p class="card-text">${{ product.price }}</p><br>
+            <p class="card-text"><strong>Description:</strong><br>{{ product.description }}</p>
+
+            <br>
+            <hr>
+
+            {% if request.user == product.created_by %}
+              <a href="{% url 'core:edit-item' product.pk %}" class="btn btn-success">Edit</a>
+              <a href="{% url 'core:delete' product.pk %}" class="btn btn-danger">Delete</a>
+
+
+            {% else %}
+              <a href="{% url 'conversation:new' product.pk %}" class="btn btn-primary">Contact Seller</a>
+
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    <h1>Related Products</h1>
+
+    <div class="row">
+      {% if related_products %}
+        {% for product in related_products %}
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+              <img src="{{ product.image.url }}" class="card-img-top" alt="..." height="250;" border="2px solid green;">
+              <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">${{ product.price }}</p>
+                <a href="{% url 'core:detail' product.pk %}" class="btn btn-primary">View</a>
+
+              </div>
+            </div>
+        </div>
+
+        {% endfor %}
+      {% else %}
+        <p>There is no related products for this category</p>
+      {% endif %}
+    </div>
+{% endblock content %}

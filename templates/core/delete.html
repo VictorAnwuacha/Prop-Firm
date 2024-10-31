@@ -1,0 +1,16 @@
+{% extends "core/base.html" %}
+
+{% block title %}Delete{% endblock title %}
+
+{% block content %}
+    <h1>Delete</h1>
+        <form action="" method="POST">
+            {% csrf_token %}
+
+            <p class="my-5">Are you sure that you want to delete <strong>"{{ product.name }}"</strong>?</p>
+
+            <a href="{% url 'core:detail' product.pk %}" class="btn btn-success">Back</a>
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        </form>
+
+{% endblock content %}

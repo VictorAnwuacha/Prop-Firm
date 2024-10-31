@@ -1,0 +1,79 @@
+{% extends "core/base.html" %}
+
+    {% block title %}Inbox{% endblock title %}
+
+    {% block content %}
+
+    <div class="container mt-4">
+        <div class="col-lg-6 mx-auto space-y-6">
+            <div class="bg-dark rounded mx-auto my-5 py-3">
+                <div class="p-3 d-flex ">
+                    <div class="px-3 container-fluid">
+                        {% for message in conversation.messages.all %}
+                            {% if message.created_by == request.user %}
+                              <div class="message-container text-end text-light rounded py-2 px-3 mb-3"
+                                     style="background-color: #1679AB; left:180px;">
+                                    <p class="mb-1"><strong>{{ message.created_by.username }}</strong> | @{{ message.created_at|timesince }}</p>
+                                    <p>{{ message.content }}</p>
+                                </div>
+                            {% else %}
+                              <div class="message-container text-start bg-warning text-light rounded py-2 px-3 mb-3">
+                                    <p class="mb-1"><strong>{{ message.created_by.username }}</strong> | @{{ message.created_at|timesince }}</p>
+                                    <p>{{ message.content }}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                </div>
+                <hr>
+                    <div style="text-align:center" class="mb-5">
+                        <form action="" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.content }}
+                        </div>
+
+                        <button class="btn btn-outline-success">Send</button>
+                        </form>
+                    </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <style>
+    .message-container {
+        max-width: 70%;
+        position: relative;
+    }
+
+    .message-container:before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        border-style: solid;
+        border-width: 10px 15px 0;
+        border-color: #fff transparent transparent;
+        z-index: 1;
+    }
+
+    .message-container.text-end:before {
+        right: 0;
+        transform: translateX(100%);
+        border-left-width: 0;
+        border-right-width: 15px;
+    }
+
+    .message-container.text-start:before {
+        left: 0;
+        transform: translateX(-100%);
+        border-right-width: 0;
+        border-left-width: 15px;
+    }
+    </style>
+
+
+    {% endblock content %}
+

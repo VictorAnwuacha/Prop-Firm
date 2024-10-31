@@ -1,0 +1,33 @@
+{% extends "core/base.html" %}
+
+{% block title %}Inbox{% endblock title %}
+
+{% block content %}
+    <div class="mt-5">
+        <div class="col-lg-6 mx-auto my-5 space-y-6">
+            {% if conversations %}
+                {% for conversation in conversations %}
+                <a href="{% url 'conversation:detail' conversation.id %}" class="text-decoration-none">
+                    <div class="p-3 d-flex bg-dark text-white rounded">
+                        <div class="">
+                            <img style="height:80px; width:80px; border-radius:10%;"
+                                 src="{{ conversation.item.image.url }}" alt="{{ conversation.item.name }}">
+                        </div>
+                        <div class="px-4">
+                            {% for member in conversation.members.all %}
+                                {% if member == conversation.item.created_by %}
+                                    <p class="mb-4"><strong>Vendor: @{{ member.username }}</strong> | {{ conversation.modified_at|timesince }} ago</p>
+                                    <p><strong>Product name: </strong>{{ conversation.item.name }}</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </a>
+                <hr>
+                {% endfor %}
+            {% else %}
+            <p class="bg-secondary text-light text-center rounded p-5" style="font-weight: bold;">You do not have any <span class="text-warning">conversation</span> yet <span class="text-warning">!</span></p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}
